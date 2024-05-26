@@ -142,7 +142,7 @@ def edit(image_path, title,category,subtitle):
 
     
     
-    position = (1100,340)  
+    position = (1100,400)  
     box_width = 500
     box_height = 200
     
@@ -295,66 +295,95 @@ def main():
     urls = get_links()
     # URL to scrape
     
+    
+    
     for url in urls:
-        try:
-          
-            # Set up Selenium webdriver for Edge
-            driver = webdriver.Edge()
-            # Load the webpage
-            driver.get(url)
-            
-            # Get the page source after JavaScript has rendered it
-            page_source = driver.page_source
-            
-            # Close the Selenium webdriver
-            driver.quit()
-            
-            
-            
-            # Parse the HTML using BeautifulSoup
-            soup = BeautifulSoup(page_source, 'html.parser')
-            
-            # Find all image tags
-            images = soup.find_all('img')
-            
-            # Extract image URLs
-            image_urls = [img['src'] for img in images if 'src' in img.attrs]
-            
-            txt = summary(soup.body.text)
-            
-            title = soup.title.text
-            
-            captn = caption(txt,title,url)
-            
-            article_text = str(soup.body.text).strip()
-            
-            # Define the phrase to search for
-            phrase = str(soup.title.text).strip()
-            
-            # Split the article text using the phrase as a delimiter
-            parts = article_text.split(phrase)
-            
-            
-            if len(parts) > 1:
-                # Extract the words before and after the phrase
-                category = parts[0].strip().split('\n')[-1]
-                subheader = parts[1].strip().split('\n')[0]
-            
-            get_image(image_urls[2])
-            
-            files = os.listdir(dummy_folder)
-            print(parts)
-            
-            for name in files:
+        MATCH = False
+        with open(r"E:\Meme bot\Mischief\urls.txt",'r') as f:
+            veto = f.read().split('\n')
+        for v in veto:
+            if url == v:
+                MATCH = True
+        if MATCH == False:
+            try:
+              
+                # Set up Selenium webdriver for Edge
+                driver = webdriver.Edge()
+                # Load the webpage
+                driver.get(url)
                 
-                edit(dummy_folder + '/' + name,title,category,subheader)
-               
-                bot.upload_photo(dummy_folder + '/' + name + '.jpg',caption=captn)
-                os.remove(dummy_folder + '/' + name + '.REMOVE_ME')
-        except:
-            files = os.listdir(dummy_folder)
-            for name in files:
-                os.remove(dummy_folder + '/' + name)
+                # Get the page source after JavaScript has rendered it
+                page_source = driver.page_source
+                
+                # Close the Selenium webdriver
+                driver.quit()
+                
+                
+                
+                # Parse the HTML using BeautifulSoup
+                soup = BeautifulSoup(page_source, 'html.parser')
+                
+                # Find all image tags
+                images = soup.find_all('img')
+                
+                # Extract image URLs
+                image_urls = [img['src'] for img in images if 'src' in img.attrs]
+                
+                txt = summary(soup.body.text)
+                
+                title = soup.title.text
+                
+                captn = caption(txt,title,url)
+                
+                article_text = str(soup.body.text).strip()
+                
+                # Define the phrase to search for
+                phrase = str(soup.title.text).strip()
+                
+                # Split the article text using the phrase as a delimiter
+                parts = article_text.split(phrase)
+                
+                
+                if len(parts) > 1:
+                    # Extract the words before and after the phrase
+                    category = parts[0].strip().split('\n')[-1]
+                    subheader = parts[1].strip().split('\n')[0]
+                else:
+                    category = 'News'
+                    subheader = 'Read the full article at www.socialistworker.co.uk'
+                if category == 'Palestine 2023-24':
+                    category = 'Palestine'
+                elif category == 'General Election 2024':
+                    category = 'Election'
+                elif category == 'Reviews & Culture':
+                    category = 'Culture'
+                    
+                    
+                
+                get_image(image_urls[2])
+                
+                files = os.listdir(dummy_folder)
+                
+                for name in files:
+                    
+                    edit(dummy_folder + '/' + name,title,category,subheader)
+                   
+                    bot.upload_photo(dummy_folder + '/' + name + '.jpg',caption=captn)
+                    os.remove(dummy_folder + '/' + name + '.REMOVE_ME')
+                    rnd = np.random.normal(2000,100)
+                    t.sleep(rnd)
+                
+            except:
+                files = os.listdir(dummy_folder)
+                for name in files:
+                    os.remove(dummy_folder + '/' + name)
+                
+            with open(r"E:\Meme bot\Mischief\urls.txt",'a') as f:
+                f.write(url)
+                f.write('\n')
+            
+            
+    
             
         
             
@@ -364,4 +393,3 @@ def main():
         
 while True:
     main()
-    t.sleep(86400 * 7)
