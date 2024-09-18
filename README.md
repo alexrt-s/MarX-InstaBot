@@ -1,5 +1,5 @@
 # MarX
-A project, using an Instagram API and web scraping to turn news articles into Instagram posts. Scraping images, headlines, sub-headlines and body of the text ,plus a little graphic design and natural language processing, aesthetic and informative instagram posts can be generated. This bot was developed using stories taken from www.socialistworker.co.uk , but could easily be adapted to pull from other sites.
+A project, using an Instagram API and web scraping to turn news articles into Instagram posts. Scraping images, headlines, sub-headlines and body of the text ,plus a little graphic design and natural language processing, aesthetic and informative instagram posts can be generated. This bot was developed using stories taken from www.socialistworker.co.uk , but could easily be adapted to pull from other sites (though this is not recommended because socialist worker is the best).
 
 # Dependencies
 
